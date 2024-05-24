@@ -1,0 +1,24 @@
+
+Character.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+hooded
+  rotate: false
+  xy: 1, 1
+  size: 768, 864
+  orig: 768, 864
+  offset: 0, 0
+  index: -1
+
+Character2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+hoodedInverted
+  rotate: false
+  xy: 1, 1
+  size: 768, 864
+  orig: 768, 864
+  offset: 0, 0
+  index: -1

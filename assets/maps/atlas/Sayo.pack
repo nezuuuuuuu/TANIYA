@@ -1,0 +1,12 @@
+
+sayo.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+SAYO_ALL_ANIMATION
+  rotate: false
+  xy: 1, 1
+  size: 5000, 288
+  orig: 5000, 288
+  offset: 0, 0
+  index: -1
