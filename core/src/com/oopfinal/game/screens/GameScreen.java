@@ -5,13 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -25,14 +22,14 @@ import com.oopfinal.game.tools.WorldContactListener;
 
 import java.util.ArrayList;
 
-public class LogInScreen implements Screen {
+public class GameScreen implements Screen {
     OOPFinal game;
     Viewport viewport;
-   private OrthographicCamera camera;
-   TmxMapLoader mapLoader;
-   TiledMap map;
-   OrthogonalTiledMapRenderer renderer;
-   Bullet bullet;
+    private OrthographicCamera camera;
+    TmxMapLoader mapLoader;
+    TiledMap map;
+    OrthogonalTiledMapRenderer renderer;
+    Bullet bullet;
 
 
    //box2dVariables
@@ -47,24 +44,21 @@ public class LogInScreen implements Screen {
     //BULLETS
 
     ArrayList<Bullet> bullets;
-
     BulletPool bpool;
-
-
     ArrayList<Player> players;
-CollisionWithMap collisionWithMap;
+    CollisionWithMap collisionWithMap;
 
-    public LogInScreen(OOPFinal game) {
+    public GameScreen(OOPFinal game) {
         bullets=new ArrayList<>();
         players=new ArrayList<>();
-        atlas = new TextureAtlas("C:\\Users\\kylak\\Documents\\Files_Nico\\Object_Oriented_Programming\\OOPFinal\\assets\\maps\\atlas\\Sayo.pack");
+        atlas = new TextureAtlas(Gdx.files.internal("maps/atlas/Sayo.pack")); // Changed to use Gdx.files
 
 
         this.game=game;
         camera=new OrthographicCamera();
         viewport=new FitViewport(OOPFinal.V_WIDTH/OOPFinal.PPM,OOPFinal.V_HEIGHT/OOPFinal.PPM,camera);
         mapLoader=new TmxMapLoader();
-        map=mapLoader.load("maps//MapByNico.tmx");
+        map = mapLoader.load(Gdx.files.internal("maps/MapByNico.tmx").path()); // Changed to use Gdx.files
 
         renderer=new OrthogonalTiledMapRenderer(map,1/OOPFinal.PPM);
         camera.position.set(viewport.getWorldWidth()/2,viewport.getWorldHeight()/2,0);
@@ -84,7 +78,7 @@ CollisionWithMap collisionWithMap;
     public TextureAtlas getAtlas(){
         return atlas;
     }
-    public void handlInput(float delta){
+    public void handleInput(float delta){
 
         for(Player p:players){
             p.handleInput(delta,bullets,x,y);
@@ -94,7 +88,7 @@ CollisionWithMap collisionWithMap;
 
     }
     public  void update(float delta){
-        handlInput(delta);
+        handleInput(delta);
 
         world.step(1/60f,1,2);
         for (Player p:players){
@@ -125,21 +119,30 @@ CollisionWithMap collisionWithMap;
     public void render(float delta) {
         update(delta);
 
-        Gdx.gl.glClearColor(0,0,0,1);
+        // Toggle full-screen mode when F11 is pressed
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F11)) {
+            if (Gdx.graphics.isFullscreen()) {
+                Gdx.graphics.setWindowedMode(1280, 720);
+            } else {
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            }
+        }
+
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.setProjectionMatrix(camera.combined);
         renderer.render();
 
-        b2dr.render(world,camera.combined);
+        b2dr.render(world, camera.combined);
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
 
-        for (Player p:players){
+        for (Player p : players) {
             player.draw(game.batch);
         }
 
-        for(Bullet b: bullets){
+        for (Bullet b : bullets) {
             b.draw(game.batch);
         }
         game.batch.end();
@@ -147,9 +150,8 @@ CollisionWithMap collisionWithMap;
 
     @Override
     public void resize(int width, int height) {
-
         viewport.update(width,height);
-
+        camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
     }
 
     @Override
