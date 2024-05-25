@@ -3,7 +3,7 @@ package com.oopfinal.game.tools;
 import com.badlogic.gdx.physics.box2d.*;
 
 import java.util.ArrayList;
-import com.oopfinal.game.sprite.characters.Player;
+import com.oopfinal.game.sprite.Player;
 
 
 public class WorldContactListener implements ContactListener {
