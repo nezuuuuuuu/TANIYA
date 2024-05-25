@@ -4,18 +4,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.oopfinal.game.OOPFinal;
-import com.oopfinal.game.screens.LogInScreen;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.RegionInfluencer;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
-import com.oopfinal.game.OOPFinal;
-import com.oopfinal.game.screens.LogInScreen;
+import com.oopfinal.game.screens.GameScreen;
+
 public class Bullet extends Sprite implements Disposable  {
 
 
@@ -35,7 +27,7 @@ public class Bullet extends Sprite implements Disposable  {
 
          Player player;
 
-    public  Bullet(World world, LogInScreen screen,float x,float y,Player player){
+    public  Bullet(World world, GameScreen screen, float x, float y, Player player){
 
             super(screen.getAtlas().findRegion("SAYO_ALL_ANIMATION"));
             this.y=y;

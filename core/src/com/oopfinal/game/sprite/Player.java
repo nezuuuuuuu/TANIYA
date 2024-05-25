@@ -2,19 +2,15 @@ package com.oopfinal.game.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.RegionInfluencer;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.oopfinal.game.OOPFinal;
-import com.oopfinal.game.screens.LogInScreen;
+import com.oopfinal.game.screens.GameScreen;
 
 import java.util.ArrayList;
 
@@ -37,7 +33,7 @@ public class Player extends Sprite {
 
     public CircleShape shape;
     Rectangle footer;
-    LogInScreen screen;
+    GameScreen screen;
 
     public boolean canRun=true;
 
@@ -46,7 +42,7 @@ public class Player extends Sprite {
 
 
 
-    public  Player(World world, LogInScreen screen){
+    public  Player(World world, GameScreen screen){
         super(screen.getAtlas().findRegion("SAYO_ALL_ANIMATION"));
         this.screen=screen;
         currentState=State.IDLING;

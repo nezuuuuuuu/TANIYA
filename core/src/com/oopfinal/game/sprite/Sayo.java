@@ -8,10 +8,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.oopfinal.game.OOPFinal;
-import com.oopfinal.game.screens.LogInScreen;
+import com.oopfinal.game.screens.GameScreen;
 
 public class Sayo extends Player{
-    public Sayo(World world, LogInScreen screen) {
+    public Sayo(World world, GameScreen screen) {
         super(world, screen);
         currentState=State.IDLING;
         previousState=State.IDLING;
