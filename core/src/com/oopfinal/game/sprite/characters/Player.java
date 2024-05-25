@@ -1,25 +1,20 @@
-package com.oopfinal.game.sprite.characters;
+package com.oopfinal.game.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.oopfinal.game.OOPFinal;
-import com.oopfinal.game.screens.LogInScreen;
-import com.oopfinal.game.sprite.bullet.Bullet;
-import com.oopfinal.game.sprite.bullet.SayoBullet;
-import com.oopfinal.game.tools.BulletPool;
+import com.oopfinal.game.screens.GameScreen;
 
 import java.util.ArrayList;
 
-public abstract class Player extends Sprite {
-
+public class Player extends Sprite {
 
     public enum State {FALLING, IDLING, JUMPING, RUNNING}
     public World world;
@@ -38,28 +33,27 @@ public abstract class Player extends Sprite {
 
     public CircleShape shape;
     Rectangle footer;
-    LogInScreen screen;
+    GameScreen screen;
 
     public boolean canRun=true;
-    float x;
-    float y;
-    BulletPool bulletPool;
 
 
 
 
 
-    public  Player(World world, LogInScreen screen, TextureAtlas.AtlasRegion atlasRegion){
-        super(atlasRegion);
+
+    public  Player(World world, GameScreen screen){
+        super(screen.getAtlas().findRegion("SAYO_ALL_ANIMATION"));
         this.screen=screen;
-        this.world=world;
-        bulletPool=new BulletPool(world,screen);
-
         currentState=State.IDLING;
         previousState=State.IDLING;
         stateTimer=0;
         runningRight=true;
         Array<TextureRegion> frames=new Array<>();
+//        for(int i=0; i<1;i++)
+//            frames.add(new TextureRegion(getTexture(),0,0,32*6,32*8));
+//        idling=new Animation<TextureRegion>(0.1f,frames);
+//        frames.clear();
 
         for(int i=0; i<15;i++)
             frames.add(new TextureRegion(getTexture(),i*32*6,0,32*6,32*8));
@@ -68,7 +62,7 @@ public abstract class Player extends Sprite {
 
 
 
-
+        this.world=world;
         definePlayer();
         idle =new TextureRegion(getTexture(),0,0,32*6,32*8);
         setBounds(0,0,32*3/OOPFinal.PPM,32*3/OOPFinal.PPM);
@@ -78,8 +72,6 @@ public abstract class Player extends Sprite {
         setPosition(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2);
         setRegion(getFrame(dt));
        System.out.println(jumped);
-       x=b2body.getPosition().x;
-       y=b2body.getPosition().y;
 
    }
 
@@ -164,11 +156,58 @@ public abstract class Player extends Sprite {
     }
 
 
-    abstract public void handleInput(float dt, ArrayList<Bullet> bullets);
+    public void handleInput(float dt, ArrayList<Bullet> bullets, float x, float y) {
+        this.b2body.setLinearVelocity(0f, this.b2body.getLinearVelocity().y);
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && this.b2body.getLinearVelocity().x <= 2 && canRun) {
+            this.b2body.applyLinearImpulse(3f, 0,x,y, true);
+//            this.b2body.applyLinearImpulse(3f,this.b2body.getLinearVelocity().y,true);
+//            this.b2body.setLinearVelocity(3f, this.b2body.getLinearVelocity().y);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && this.b2body.getLinearVelocity().x >= -2 && canRun) {
+            this.b2body.applyLinearImpulse(-3f, 0,x,y, true);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            if (jumped!=2) {
+                this.b2body.applyLinearImpulse(new Vector2(0, 6f), this.b2body.getWorldCenter(), true);
+                setJumped();
+            }
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            this.b2body.applyLinearImpulse(new Vector2(0, -0.2f), this.b2body.getWorldCenter(), true);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            if (!this.isFlipX()) {
+                createBullet(x + 0.4f, y, 10f, 0, bullets);
+            } else {
+                createBullet(x - 0.3f, y, -10f, 0, bullets);
+            }
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+            createBullet(x, y - 0.3f, 0, -9f, bullets);
+            createBullet(x, y + 0.3f, 0, 9f, bullets);
+            createBullet(x + 0.3f, y, 9f, 0, bullets);
+            createBullet(x - 0.3f, y, -9f, 0, bullets);
+            createBullet(x - 0.3f, y + 0.3f, -9f, 9f, bullets);
+            createBullet(x + 0.3f, y - 0.3f, 9f, -9f, bullets);
+            createBullet(x + 0.3f, y + 0.3f, 9f, 9f, bullets);
+            createBullet(x - 0.3f, y - 0.3f, -9f, -9f, bullets);
+        }
+
+        ArrayList<Bullet> toremove = new ArrayList<>();
+    }
     public void  setJumped(){
         jumped=(jumped+1)%3;
     }
 
-    abstract void createBullet(float x, float y, float impulseX, float impulsey, ArrayList<Bullet> bullets);
+    void createBullet(float x, float y, float impulseX, float impulsey, ArrayList<Bullet> bullets) {
+        Bullet b = new Bullet(world, screen, x, y,this);
+        bullets.add(b);
+        b.b2body.applyLinearImpulse(new Vector2(impulseX, impulsey), b.b2body.getWorldCenter(), true);
+    }
 
 }
