@@ -1,24 +1,22 @@
 package com.oopfinal.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oopfinal.game.OOPFinal;
-import com.oopfinal.game.sprite.Bullet;
-import com.oopfinal.game.sprite.Player;
+import com.oopfinal.game.sprite.bullet.Bullet;
+import com.oopfinal.game.sprite.characters.Player;
+import com.oopfinal.game.sprite.characters.QIqi;
+import com.oopfinal.game.sprite.characters.Sayo;
 import com.oopfinal.game.tools.BulletPool;
 import com.oopfinal.game.tools.CollisionWithMap;
 import com.oopfinal.game.tools.WorldContactListener;
@@ -73,8 +71,10 @@ CollisionWithMap collisionWithMap;
         collisionWithMap= new CollisionWithMap(world,map);
 
 
-        player=new Player(world,this);
-        players.add(player);
+//        player=new Sayo(world,this);
+
+//        players.add(player);
+        players.add( new QIqi(world,this));
 //        player.setPosition((viewport.getWorldWidth())/2,(viewport.getWorldHeight())/2);
         bpool=new BulletPool(world,this);
 
@@ -87,7 +87,7 @@ CollisionWithMap collisionWithMap;
     public void handlInput(float delta){
 
         for(Player p:players){
-            p.handleInput(delta,bullets,x,y);
+            p.handleInput(delta,bullets);
         }
         handleBullets(delta);
 
@@ -109,8 +109,7 @@ CollisionWithMap collisionWithMap;
 
         }
 //        camera.position.x=player.b2body.getPosition().x;
-        x=player.b2body.getPosition().x;
-        y=player.b2body.getPosition().y;
+
 //        camera.position.y=player.b2body.getPosition().y;
         camera.update();
         renderer.setView(camera);
@@ -135,13 +134,14 @@ CollisionWithMap collisionWithMap;
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
 
-        for (Player p:players){
-            player.draw(game.batch);
-        }
 
         for(Bullet b: bullets){
             b.draw(game.batch);
         }
+        for (Player p:players){
+            p.draw(game.batch);
+        }
+
         game.batch.end();
     }
 
