@@ -6,12 +6,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.oopfinal.game.OOPFinal;
-import com.oopfinal.game.screens.LogInScreen;
+import com.oopfinal.game.screens.GameScreen;
 import com.oopfinal.game.sprite.characters.Player;
 
 public class SayoBullet extends Bullet{
-    public SayoBullet(World world, LogInScreen screen, float x, float y, Player player) {
-        super(world, screen, x, y, player, new TextureAtlas("maps\\atlas\\tornado.pack").findRegion("tornadoRemoved"));
+    public SayoBullet(World world, GameScreen screen, float x, float y, Player player) {
+        super(world, screen, x, y, player, new TextureAtlas("maps\\atlas\\skills.pack").findRegion("allthree"));
 
     }
 
@@ -30,5 +30,12 @@ public class SayoBullet extends Bullet{
         running=new Animation<TextureRegion>(0.07f,frames);
         frames.clear();
         return;
+    }
+
+    @Override
+    void bulletAnimation() {
+        idle =new TextureRegion(getTexture(),32*15,0,32*10,25);
+        setBounds(0,0,32*16/ OOPFinal.PPM,32*2/OOPFinal.PPM);
+
     }
 }

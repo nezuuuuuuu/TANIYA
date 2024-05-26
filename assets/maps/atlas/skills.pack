@@ -1,0 +1,19 @@
+
+skills.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+smoke
+  rotate: false
+  xy: 1, 17
+  size: 500, 158
+  orig: 500, 158
+  offset: 0, 0
+  index: -1
+allthree
+  rotate: false
+  xy: 503, 1
+  size: 400, 174
+  orig: 400, 174
+  offset: 0, 0
+  index: -1

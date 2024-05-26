@@ -24,34 +24,21 @@ public class CollisionWithMap {
         PolygonShape shape=new PolygonShape();
 
         //collissions
-        //---blocks
-        for(MapObject object : map.getLayers().get(5).getObjects()){
+//        ---blocks
+        for (MapObject object : map.getLayers().get(6).getObjects()) {
+            Rectangle rectangle=((RectangleMapObject) object).getRectangle();
 
-
-
-            if (object instanceof PolygonMapObject) {
-                shape = getPolygon((PolygonMapObject)object);
-
-            }else if(object instanceof RectangleMapObject){
-                Rectangle rectangle=((RectangleMapObject) object).getRectangle();
-                bdef.type=BodyDef.BodyType.StaticBody;
-                bdef.position.set((rectangle.getX()+rectangle.getWidth()/2)/ OOPFinal.PPM,(rectangle.getY()+rectangle.getHeight()/2)/OOPFinal.PPM);
-                body= world.createBody(bdef);
-                shape.setAsBox((rectangle.getWidth()/2)/OOPFinal.PPM,(rectangle.getHeight()/2)/OOPFinal.PPM);
-                fdef.shape=shape;
-                body.createFixture(fdef);
-            }else {
-                continue;}
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            body = world.createBody(bdef);
-            fdef.shape = shape;
+            bdef.type=BodyDef.BodyType.StaticBody;
+            bdef.position.set((rectangle.getX()+rectangle.getWidth()/2)/ OOPFinal.PPM,(rectangle.getY()+rectangle.getHeight()/2)/OOPFinal.PPM);
+            body= world.createBody(bdef);
+            shape.setAsBox((rectangle.getWidth()/2)/OOPFinal.PPM,(rectangle.getHeight()/2)/OOPFinal.PPM);
+            fdef.shape=shape;
             body.createFixture(fdef).setUserData("wall");
+            objects.add(body);
 
         }
 
-
-        for (MapObject object:map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)){
+        for (MapObject object:map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
 
             Rectangle rectangle=((RectangleMapObject) object).getRectangle();
 
