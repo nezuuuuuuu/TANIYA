@@ -134,7 +134,7 @@ CollisionWithMap collisionWithMap;
         game.batch.setProjectionMatrix(camera.combined);
         renderer.render();
 
-        b2dr.render(world,camera.combined);
+//        b2dr.render(world,camera.combined);
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();

@@ -58,16 +58,16 @@ public abstract class Player extends Sprite {
         runningRight=true;
         Array<TextureRegion> frames=new Array<>();
 
-        for(int i=0; i<15;i++)
-            frames.add(new TextureRegion(getTexture(),i*32*6,0,32*6,32*8));
-        running=new Animation<TextureRegion>(0.1f,frames);
+        for(int i=0; i<18;i++)
+            frames.add(new TextureRegion(getTexture(),i*32*8,0,32*7,32*9));
+        running=new Animation<TextureRegion>(0.07f,frames);
         frames.clear();
 
 
 
 
         definePlayer();
-        idle =new TextureRegion(getTexture(),0,0,32*6,32*8);
+        idle =new TextureRegion(getTexture(),0,0,32*7,32*9);
         setBounds(0,0,32*3/OOPFinal.PPM,32*3/OOPFinal.PPM);
         setRegion(idle);
    }

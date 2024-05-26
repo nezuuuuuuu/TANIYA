@@ -17,7 +17,7 @@ public class QIqi extends Player{
 
 
     public QIqi(World world, GameScreen screen) {
-        super(world, screen,new TextureAtlas("C:\\Users\\kylak\\Documents\\Files_Nico\\Object_Oriented_Programming\\OOPFinal\\assets\\maps\\atlas\\Sayo.pack").findRegion("SAYO_ALL_ANIMATION"));
+        super(world, screen,new TextureAtlas("C:\\Users\\kylak\\Documents\\Files_Nico\\Object_Oriented_Programming\\OOPFinal\\assets\\maps\\atlas\\qiqi.pack").findRegion("walk"));
 
 
 
