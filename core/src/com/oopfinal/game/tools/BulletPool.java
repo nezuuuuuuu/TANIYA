@@ -3,7 +3,7 @@ package com.oopfinal.game.tools;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Pool;
 import com.oopfinal.game.screens.GameScreen;
-import com.oopfinal.game.sprite.Bullet;
+import com.oopfinal.game.sprite.bullet.Bullet;
 
 public class BulletPool extends Pool<Bullet> {
     private World world;

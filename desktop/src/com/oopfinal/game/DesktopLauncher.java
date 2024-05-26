@@ -12,8 +12,8 @@ public class DesktopLauncher {
 		config.setTitle("OOPFinal");
 
 		// Set window dimensions
-		int windowWidth = 1280;
-		int windowHeight = 720;
+		int windowWidth = 793;
+		int windowHeight = 544;
 		config.setWindowedMode(windowWidth, windowHeight);
 		config.setResizable(true);
 

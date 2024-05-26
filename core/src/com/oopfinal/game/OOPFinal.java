@@ -7,8 +7,8 @@ import com.oopfinal.game.screens.SplashScreen;
 public class OOPFinal extends Game {
 	public SpriteBatch batch;
 	public  static  final float PPM=100;
-	public static int V_WIDTH=2000;
-	public  static int V_HEIGHT=2000;
+	public static int V_WIDTH=1856;
+	public  static int V_HEIGHT=1088;
 	
 	@Override
 	public void create () {
