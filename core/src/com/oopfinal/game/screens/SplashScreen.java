@@ -26,7 +26,7 @@ public class SplashScreen implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        splashImg = new Texture("maps/images/SplashScreen.png");
+        splashImg = new Texture("SplashScreen.png");
         timeSinceShown = 0;  // Initialize the timer
         alpha = 0f;
 

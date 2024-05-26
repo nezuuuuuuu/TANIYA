@@ -51,14 +51,14 @@ public class GameScreen implements Screen {
     public GameScreen(OOPFinal game) {
         bullets=new ArrayList<>();
         players=new ArrayList<>();
-        atlas = new TextureAtlas(Gdx.files.internal("maps/atlas/Sayo.pack")); // Changed to use Gdx.files
+        atlas = new TextureAtlas(Gdx.files.internal("atlas/Sayo.pack")); // Changed to use Gdx.files
 
 
         this.game=game;
         camera=new OrthographicCamera();
         viewport=new FitViewport(OOPFinal.V_WIDTH/OOPFinal.PPM,OOPFinal.V_HEIGHT/OOPFinal.PPM,camera);
         mapLoader=new TmxMapLoader();
-        map = mapLoader.load(Gdx.files.internal("maps/MapByNico.tmx").path()); // Changed to use Gdx.files
+        map = mapLoader.load(String.valueOf(Gdx.files.internal("maps/MapByNico.tmx"))); // Changed to use Gdx.files
 
         renderer=new OrthogonalTiledMapRenderer(map,1/OOPFinal.PPM);
         camera.position.set(viewport.getWorldWidth()/2,viewport.getWorldHeight()/2,0);
