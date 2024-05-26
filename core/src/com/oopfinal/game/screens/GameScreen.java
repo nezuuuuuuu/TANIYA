@@ -10,10 +10,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oopfinal.game.OOPFinal;
 import com.oopfinal.game.sprite.bullet.Bullet;
+import com.oopfinal.game.sprite.bullet.NotRemovable;
 import com.oopfinal.game.sprite.characters.Player;
 import com.oopfinal.game.sprite.characters.QIqi;
 import com.oopfinal.game.sprite.characters.Sayo;
@@ -22,8 +24,11 @@ import com.oopfinal.game.tools.CollisionWithMap;
 import com.oopfinal.game.tools.WorldContactListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class LogInScreen implements Screen {
+public class GameScreen implements Screen {
     OOPFinal game;
     Viewport viewport;
    private OrthographicCamera camera;
@@ -34,7 +39,7 @@ public class LogInScreen implements Screen {
 
 
    //box2dVariables
-    private World world;
+    public World world;
     Box2DDebugRenderer b2dr;
     //player
     Player player;
@@ -43,16 +48,20 @@ public class LogInScreen implements Screen {
     float x,y;
 
     //BULLETS
+    public     ArrayList<Bullet> bullets;
 
-    ArrayList<Bullet> bullets;
-
-    BulletPool bpool;
+    public BulletPool bpool;
 
 
-    ArrayList<Player> players;
+    public ArrayList<Player> players;
+    public List<Bullet> toremove= Collections.synchronizedList(new ArrayList<Bullet>());
+
+
 CollisionWithMap collisionWithMap;
 
-    public LogInScreen(OOPFinal game) {
+    public GameScreen(OOPFinal game) {
+
+
         bullets=new ArrayList<>();
         players=new ArrayList<>();
         atlas = new TextureAtlas("C:\\Users\\kylak\\Documents\\Files_Nico\\Object_Oriented_Programming\\OOPFinal\\assets\\maps\\atlas\\Sayo.pack");
@@ -60,7 +69,7 @@ CollisionWithMap collisionWithMap;
 
         this.game=game;
         camera=new OrthographicCamera();
-        viewport=new FitViewport(OOPFinal.V_WIDTH/OOPFinal.PPM,OOPFinal.V_HEIGHT/OOPFinal.PPM,camera);
+        viewport=new FillViewport(OOPFinal.V_WIDTH/OOPFinal.PPM,OOPFinal.V_HEIGHT/OOPFinal.PPM,camera);
         mapLoader=new TmxMapLoader();
         map=mapLoader.load("maps//MapByNico.tmx");
 
@@ -71,14 +80,13 @@ CollisionWithMap collisionWithMap;
         collisionWithMap= new CollisionWithMap(world,map);
 
 
-//        player=new Sayo(world,this);
 
-//        players.add(player);
+//        players.add(player=new Sayo(world,this));
         players.add( new QIqi(world,this));
 //        player.setPosition((viewport.getWorldWidth())/2,(viewport.getWorldHeight())/2);
         bpool=new BulletPool(world,this);
 
-        world.setContactListener(new WorldContactListener(players));
+        world.setContactListener(new WorldContactListener(this));
 
     }
     public TextureAtlas getAtlas(){
@@ -101,11 +109,8 @@ CollisionWithMap collisionWithMap;
             p.update(delta);
         }
 
-
         for(Bullet b: bullets){
             b.update(delta);
-
-
 
         }
 //        camera.position.x=player.b2body.getPosition().x;
@@ -135,11 +140,12 @@ CollisionWithMap collisionWithMap;
         game.batch.begin();
 
 
-        for(Bullet b: bullets){
-            b.draw(game.batch);
-        }
+
         for (Player p:players){
             p.draw(game.batch);
+        }
+        for(Bullet b: bullets){
+            b.draw(game.batch);
         }
 
         game.batch.end();
@@ -176,23 +182,18 @@ CollisionWithMap collisionWithMap;
 
     }
     void  handleBullets(float delta){
-        ArrayList<Bullet> toremove=new ArrayList<>();
-        for(Bullet b:bullets){
-            if(Math.abs(b.b2body.getLinearVelocity().x)<1f&&Math.abs(b.b2body.getLinearVelocity().y)<1f){
-                toremove.add(b);
 
+            bullets.removeAll(toremove);
+            for (Bullet bllets : bullets) {
+                bllets.update(delta);
             }
+            for (Bullet b : toremove) {
+                world.destroyBody(b.b2body);
+                bpool.free(b);
+            }
+            toremove.clear();
+
+
         }
 
-        bullets.removeAll(toremove);
-
-
-        for (Bullet bllets:bullets){
-            bllets.update(delta);
-        }
-        for(Bullet b:toremove){
-            world.destroyBody(b.b2body);
-            bpool.free(b);
-        }
-    }
 }

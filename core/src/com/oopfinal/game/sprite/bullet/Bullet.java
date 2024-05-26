@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.oopfinal.game.OOPFinal;
-import com.oopfinal.game.screens.LogInScreen;
+import com.oopfinal.game.screens.GameScreen;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -15,21 +15,27 @@ public class Bullet extends Sprite implements Disposable  {
 
 
 
+
     public enum State {FALLING, IDLING, JUMPING, RUNNING}
         public World world;
         public Body b2body;
-        private TextureRegion idle;
+        public TextureRegion idle;
 
         private Animation<TextureRegion> running;
         private Animation<TextureRegion> idling;
         private Animation<TextureRegion> jumping;
-        private  float stateTimer;
+        public   float stateTimer;
         private boolean runningRight;
         public float x,y;
         Player player;
         TextureRegion region;
+        public float damage=15;
 
-    public  Bullet(World world, LogInScreen screen, float x, float y, Player player, TextureAtlas.AtlasRegion textureatlas){
+    public float getDamage() {
+        return damage;
+    }
+
+    public  Bullet(World world, GameScreen screen, float x, float y, Player player, TextureAtlas.AtlasRegion textureatlas){
 
             super(textureatlas);
             this.y=y;
@@ -45,17 +51,10 @@ public class Bullet extends Sprite implements Disposable  {
 
     }
     void bulletAnimation(){
-        idle =new TextureRegion(getTexture(),0,0,32*6,32*8);
-        setBounds(0,0,32*3/OOPFinal.PPM,32*3/OOPFinal.PPM);
-        Array<TextureRegion> frames=new Array<>();
 
-        for(int i=1; i<3;i++){
-            for(int j=0;j<4;j++)
-                frames.add(new TextureRegion(getTexture(),j*5+1,6*32*i,32*5,32*5));
-        }
+        idle =new TextureRegion(getTexture(),32*15,0,32*10,25);
+        setBounds(0,0,32*16/OOPFinal.PPM,32*2/OOPFinal.PPM);
 
-        running=new Animation<TextureRegion>(0.07f,frames);
-        frames.clear();
 
 
     }
@@ -63,8 +62,8 @@ public class Bullet extends Sprite implements Disposable  {
         public void update(float dt){
             stateTimer += dt;
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-            region = running.getKeyFrame(stateTimer, true);
-            setRegion(region);
+
+            setRegion(idle);
 
         }
 
@@ -72,6 +71,10 @@ public class Bullet extends Sprite implements Disposable  {
     public void dispose() {
 
 
+    }
+    public Player getPlayer()
+    {
+        return player;
     }
 
 
@@ -84,12 +87,13 @@ public class Bullet extends Sprite implements Disposable  {
 
             FixtureDef fdef =new FixtureDef();
             CircleShape shape=new CircleShape();
-            shape.setRadius(35/OOPFinal.PPM);
+            shape.setRadius(15/OOPFinal.PPM);
 
             fdef.shape=shape;
             fdef.friction=0;
-            b2body.createFixture(fdef);
+            b2body.createFixture(fdef).setUserData("bullet");
             b2body.setGravityScale(0);
+
         }
     }
 

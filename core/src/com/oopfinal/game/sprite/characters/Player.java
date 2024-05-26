@@ -1,7 +1,5 @@
 package com.oopfinal.game.sprite.characters;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -11,9 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.oopfinal.game.OOPFinal;
-import com.oopfinal.game.screens.LogInScreen;
+import com.oopfinal.game.screens.GameScreen;
 import com.oopfinal.game.sprite.bullet.Bullet;
-import com.oopfinal.game.sprite.bullet.SayoBullet;
 import com.oopfinal.game.tools.BulletPool;
 
 import java.util.ArrayList;
@@ -38,18 +35,18 @@ public abstract class Player extends Sprite {
 
     public CircleShape shape;
     Rectangle footer;
-    LogInScreen screen;
+    GameScreen screen;
 
     public boolean canRun=true;
     float x;
     float y;
     BulletPool bulletPool;
+    Float hp=100f;
 
 
 
 
-
-    public  Player(World world, LogInScreen screen, TextureAtlas.AtlasRegion atlasRegion){
+    public  Player(World world, GameScreen screen, TextureAtlas.AtlasRegion atlasRegion){
         super(atlasRegion);
         this.screen=screen;
         this.world=world;
@@ -77,7 +74,7 @@ public abstract class Player extends Sprite {
    public void update(float dt){
         setPosition(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2);
         setRegion(getFrame(dt));
-       System.out.println(jumped);
+//       System.out.println(jumped);
        x=b2body.getPosition().x;
        y=b2body.getPosition().y;
 
@@ -102,12 +99,12 @@ public abstract class Player extends Sprite {
         if ((b2body.getLinearVelocity().x>0.5||runningRight)&&region.isFlipX()) {
            region.flip(true,false);
            runningRight=true;
-            System.out.println(b2body.getLinearVelocity().y);
+//            System.out.println(b2body.getLinearVelocity().y);
        }
        else if((b2body.getLinearVelocity().x<-.5||!runningRight)&&!region.isFlipX()){
             region.flip(true,false);
             runningRight=false;
-            System.out.println(b2body.getLinearVelocity().y);
+//            System.out.println(b2body.getLinearVelocity().y);
 
         }
         stateTimer=currentState==previousState? stateTimer+dt:0;
@@ -117,11 +114,11 @@ public abstract class Player extends Sprite {
    public  State getState(){
 
        if(b2body.getLinearVelocity().y>1){
-           System.out.println("going up");
+//           System.out.println("going up");
            return State.JUMPING;
        }
        else if(b2body.getLinearVelocity().y<-1) {
-           System.out.println("going down");
+//           System.out.println("going down");
 
            return State.FALLING;
         }
@@ -167,6 +164,11 @@ public abstract class Player extends Sprite {
     abstract public void handleInput(float dt, ArrayList<Bullet> bullets);
     public void  setJumped(){
         jumped=(jumped+1)%3;
+    }
+
+
+    public void take(Bullet bullet,Player player){
+            hp=hp-bullet.getDamage();
     }
 
     abstract void createBullet(float x, float y, float impulseX, float impulsey, ArrayList<Bullet> bullets);

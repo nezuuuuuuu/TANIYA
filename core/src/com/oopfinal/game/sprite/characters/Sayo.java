@@ -2,24 +2,17 @@ package com.oopfinal.game.sprite.characters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
-import com.oopfinal.game.OOPFinal;
-import com.oopfinal.game.screens.LogInScreen;
+import com.oopfinal.game.screens.GameScreen;
 import com.oopfinal.game.sprite.bullet.Bullet;
 import com.oopfinal.game.sprite.bullet.SayoBullet;
 
 import java.util.ArrayList;
 
 public class Sayo extends Player{
-    public Sayo(World world, LogInScreen screen) {
+    public Sayo(World world, GameScreen screen) {
         super(world, screen,new TextureAtlas("C:\\Users\\kylak\\Documents\\Files_Nico\\Object_Oriented_Programming\\OOPFinal\\assets\\maps\\atlas\\Sayo.pack").findRegion("SAYO_ALL_ANIMATION"));
 
 
