@@ -57,7 +57,7 @@ public class QIqi extends Player{
             }
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
 
             if(teleportBullet==null) {
                 if(runningRight){

@@ -57,7 +57,14 @@ public class WorldContactListener implements ContactListener {
 
             for (Bullet b : gameScreen.bullets) {
                 if (b.b2body == fixtureA.getBody() || b.b2body == fixtureB.getBody()) {
-                    bullet = b;
+
+                    if(b.b2body==fixtureA.getBody()&&"QiqiTeleport".equals(fixtureA.getUserData())||
+                            b.b2body==fixtureB.getBody()&&"QiqiTeleport".equals(fixtureB.getUserData())){
+                        continue;
+                    }
+                    bullet=b;
+
+
 
                     if (b.getPlayer().b2body == fixtureA.getBody() || b.getPlayer().b2body == fixtureB.getBody()) {
                         return;
