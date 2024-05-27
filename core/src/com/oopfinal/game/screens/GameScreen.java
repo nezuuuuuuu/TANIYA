@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oopfinal.game.OOPFinal;
+import com.oopfinal.game.hud.TopHud;
 import com.oopfinal.game.sprite.bullet.Bullet;
 import com.oopfinal.game.sprite.bullet.NotRemovable;
 import com.oopfinal.game.sprite.characters.Player;
@@ -56,7 +57,7 @@ public class GameScreen implements Screen {
     public ArrayList<Player> players;
     public List<Bullet> toremove= Collections.synchronizedList(new ArrayList<Bullet>());
 
-
+    TopHud hud;
     CollisionWithMap collisionWithMap;
 
     public GameScreen(OOPFinal game) {
@@ -87,6 +88,8 @@ public class GameScreen implements Screen {
         bpool=new BulletPool(world,this);
 
         world.setContactListener(new WorldContactListener(this));
+        hud = new TopHud(game.batch);
+
 
     }
     public TextureAtlas getAtlas(){
@@ -119,6 +122,9 @@ public class GameScreen implements Screen {
         camera.update();
         renderer.setView(camera);
 
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
+        hud.update(delta);
     }
 
     @Override
@@ -149,6 +155,8 @@ public class GameScreen implements Screen {
         }
 
         game.batch.end();
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
     }
 
     @Override
