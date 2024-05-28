@@ -65,5 +65,38 @@ public class SQLMethods {
             e.printStackTrace();
         }
     }
+    public static void insertPlayer(String player, int playerID){
+        try(Connection c = MySQLConnector.getConnection(); PreparedStatement pst = c.prepareStatement(
+                "INSERT INTO tblplayers(playerID, playerUsername) VALUES (?, ?)"
+        )){
+            pst.setInt(1, playerID);
+            pst.setString(2, player);
+
+            int rowsInserted = pst.executeUpdate();
+            if(rowsInserted >0){
+                System.out.println("Player added.");
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
     //RETRIEVE = LOAD GAME -> RETRIEVE GAME FROM TABLE
+    public static void loadGame(){
+        try(Connection c = MySQLConnector.getConnection(); PreparedStatement pst = c.prepareStatement(
+                "SELECT FROM tblgame(gameID, p1ID, p2ID) WHERE p1ID = tblplayers.playerID AND p2ID = tblplayers.playerID"
+        )){
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+    //UPDATE = score
+    public static void updateScore(int score){}
+
+
+    //DELETE USER AND GAME
+    public static void deleteGame(){}
+    public static void deleteUser(){}
+
 }
