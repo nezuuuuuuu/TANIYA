@@ -16,8 +16,6 @@ import com.oopfinal.game.tools.BulletPool;
 import java.util.ArrayList;
 
 public abstract class Player extends Sprite {
-
-
     public enum State {FALLING, IDLING, JUMPING, RUNNING}
     public World world;
     public Body b2body;
@@ -29,7 +27,6 @@ public abstract class Player extends Sprite {
     public Animation<TextureRegion> jumping;
     public  float stateTimer;
     public boolean runningRight;
-
     public int jumped=0;
 
 
@@ -41,9 +38,7 @@ public abstract class Player extends Sprite {
     float x;
     float y;
     BulletPool bulletPool;
-    Float hp=100f;
-
-
+    int hp=100;
 
 
     public  Player(World world, GameScreen screen, TextureAtlas.AtlasRegion atlasRegion){
@@ -63,21 +58,19 @@ public abstract class Player extends Sprite {
         running=new Animation<TextureRegion>(0.07f,frames);
         frames.clear();
 
-
-
-
         definePlayer();
         idle =new TextureRegion(getTexture(),0,0,32*7,32*9);
         setBounds(0,0,32*3/OOPFinal.PPM,32*3/OOPFinal.PPM);
         setRegion(idle);
+
    }
+
    public void update(float dt){
         setPosition(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2);
         setRegion(getFrame(dt));
 //       System.out.println(jumped);
-       x=b2body.getPosition().x;
-       y=b2body.getPosition().y;
-
+        x = b2body.getPosition().x;
+        y = b2body.getPosition().y;
    }
 
    public  TextureRegion getFrame(float dt){
@@ -111,15 +104,14 @@ public abstract class Player extends Sprite {
         previousState = currentState;
        return region;
    }
-   public  State getState(){
 
+   public  State getState(){
        if(b2body.getLinearVelocity().y>1){
 //           System.out.println("going up");
            return State.JUMPING;
        }
        else if(b2body.getLinearVelocity().y<-1) {
 //           System.out.println("going down");
-
            return State.FALLING;
         }
        else if(b2body.getLinearVelocity().x!=0) {
@@ -130,6 +122,7 @@ public abstract class Player extends Sprite {
        }
 
    }
+
     public  void  definePlayer(){
         BodyDef bdef =new BodyDef();
         bdef.position.set(32*10/ OOPFinal.PPM+2,500/OOPFinal.PPM);
@@ -168,9 +161,17 @@ public abstract class Player extends Sprite {
 
 
     public void take(Bullet bullet,Player player){
-            hp=hp-bullet.getDamage();
+            hp= (int) (hp-bullet.getDamage());
     }
 
     abstract void createBullet(float x, float y, float impulseX, float impulsey, ArrayList<Bullet> bullets);
 
+
+    public int getHealth() {
+        return hp;
+    }
+
+    public void setHealth(int health) {
+        this.hp = health;
+    }
 }

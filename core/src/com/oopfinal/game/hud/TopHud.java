@@ -3,15 +3,20 @@ package com.oopfinal.game.hud;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import com.oopfinal.game.sprite.characters.Player;
 
 public class TopHud implements Disposable{
     public Stage stage;
@@ -29,7 +34,17 @@ public class TopHud implements Disposable{
     private Label marioLabel;
     private BitmapFont white;
 
-    public TopHud(SpriteBatch sb){
+    private Player playerOne;
+    private Player playerTwo;
+    private Label playerOneHealthLabel;
+    private Label playerTwoHealthLabel;
+    private Texture heartTexture;
+    private TextureRegion heartIcon;
+
+    public TopHud(SpriteBatch sb, Player playerOne, Player playerTwo){
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
+
         worldTimer = 30;
         timeCount = 0;
         score = 0;
@@ -37,13 +52,31 @@ public class TopHud implements Disposable{
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         stage = new Stage(viewport, sb); // We must create order by creating a table in our stage
 
+        heartTexture = new Texture(Gdx.files.internal("UI/health.png")); //tofix
+        heartIcon = new TextureRegion(heartTexture);
+
+        white = new BitmapFont(Gdx.files.internal("font/white16.fnt"), false);
+        Label.LabelStyle labelStyle = new Label.LabelStyle(white, Color.RED);
+
+
+        Table playerOneTable = new Table();
+        playerOneHealthLabel = new Label(String.format("%03d", playerOne.getHealth()), labelStyle);
+        playerOneTable.bottom().left();
+        playerOneTable.setFillParent(true);
+        playerOneTable.add(new Image(heartIcon)).padLeft(100).padBottom(30);
+        playerOneTable.add(playerOneHealthLabel).padLeft(10).padBottom(30);
+
+        // Create table for player two health display
+        Table playerTwoTable = new Table();
+        playerTwoHealthLabel = new Label(String.format("%03d", playerTwo.getHealth()), labelStyle);
+        playerTwoTable.bottom().right();
+        playerTwoTable.setFillParent(true);
+        playerTwoTable.add(playerTwoHealthLabel).padRight(10).padBottom(30);
+        playerTwoTable.add(new Image(heartIcon)).padRight(100).padBottom(30);
+
         table = new Table();
         table.top(); // Will put it at the top of our stage
         table.setFillParent(true);
-
-
-        white = new BitmapFont(Gdx.files.internal("font/white16.fnt"), false);
-        Label.LabelStyle labelStyle = new Label.LabelStyle(white, Color.WHITE);
 
         countdownLabel = new Label(String.format("%03d", worldTimer), labelStyle);
         scoreLabel = new Label(String.format("%06d", score), labelStyle);
@@ -63,7 +96,8 @@ public class TopHud implements Disposable{
 
         // add table to our stage
         stage.addActor(table);
-
+        stage.addActor(playerOneTable);
+        stage.addActor(playerTwoTable);
     }
 
     public void update(float dt) {
@@ -87,7 +121,6 @@ public class TopHud implements Disposable{
     @Override
     public void dispose() {
         stage.dispose();
+//        heartTexture.dispose();
     }
-
-
 }
