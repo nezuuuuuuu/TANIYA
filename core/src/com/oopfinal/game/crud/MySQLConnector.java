@@ -7,21 +7,33 @@ public class MySQLConnector {
     private static final String URL = "jdbc:mysql://localhost:3306/dbtaniya";
 
     //naka-declare nas xampp
-    private static final String USERNAME = "anais";
-    private static final String PASSWORD = "092223_aa";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "";
 
-    public static Connection getConnection(){
-        Connection c = null;
+    public static Connection getConnection() {
+//        Connection c = null;
 
-        try{
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            c = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            try(Connection c = DriverManager.getConnection(URL, USERNAME, PASSWORD)){
+                if(c != null)
+                    System.out.println("Connected to database succesfully");
+                else
+                    System.out.println("Failed to connect");
 
-            System.out.println("Connected to database");
-        }catch (ClassNotFoundException|SQLException e){
-            //throw new RuntimeException();
-            e.printStackTrace();
+                return c;
+            }
+//            System.out.println("Connected to database");
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println("Failed to connect");
+            throw new RuntimeException();
         }
-        return c;
     }
-}
+
+    public static void main(){
+        getConnection();
+        SQLMethods.createGame();
+    }
+} //end of class
+
+

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.oopfinal.game.OOPFinal;
+import com.oopfinal.game.crud.MySQLConnector;
 import com.oopfinal.game.crud.SQLMethods;
 
 public class DesktopLauncher {
@@ -12,8 +13,8 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setTitle("OOPFinal");
 
-		//Create tables
-//		SQLMethods.createGame();
+//		//Create tables
+//		MySQLConnector.main();
 
 		// Set window dimensions
 		int windowWidth = 793;
