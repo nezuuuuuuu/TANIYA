@@ -10,7 +10,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
-		config.setTitle("OOPFinal");
+		config.setTitle("TANIYA Battlegrounds");
+		config.setWindowIcon("img/hilichurl-ic.png");
 
 		// Set window dimensions
 		int windowWidth = 793;

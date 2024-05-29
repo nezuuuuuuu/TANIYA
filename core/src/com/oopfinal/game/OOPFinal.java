@@ -1,21 +1,25 @@
 package com.oopfinal.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.oopfinal.game.screens.SplashScreen;
+import com.oopfinal.game.managers.MusicManager;
+import com.oopfinal.game.screens.MainMenuScreen;
 
 public class OOPFinal extends Game {
 	public SpriteBatch batch;
 	public  static  final float PPM=100;
 	public static int V_WIDTH=1856;
 	public  static int V_HEIGHT=1088;
-	
+	private MusicManager musicManager;
+	private Screen mainMenuScreen;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-//		setScreen(new LogInScreen(this));
-		this.setScreen(new SplashScreen(this));
+		musicManager = new MusicManager();
+		mainMenuScreen = new MainMenuScreen(this, musicManager);
+		this.setScreen(new MainMenuScreen(this, musicManager));
 
 		//full screen
 //		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
