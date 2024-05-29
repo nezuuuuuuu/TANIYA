@@ -31,13 +31,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameScreen implements Screen {
     OOPFinal game;
-    Viewport viewport;
     private OrthographicCamera camera;
+    Viewport viewport;
     TmxMapLoader mapLoader;
     TiledMap map;
     OrthogonalTiledMapRenderer renderer;
     Bullet bullet;
 
+    private Player playerOne;
+    private Player playerTwo;
+    private TopHud hud;
 
     //box2dVariables
     public World world;
@@ -57,16 +60,12 @@ public class GameScreen implements Screen {
     public ArrayList<Player> players;
     public List<Bullet> toremove= Collections.synchronizedList(new ArrayList<Bullet>());
 
-    TopHud hud;
     CollisionWithMap collisionWithMap;
 
     public GameScreen(OOPFinal game) {
-
-
         bullets=new ArrayList<>();
         players=new ArrayList<>();
         atlas = new TextureAtlas(Gdx.files.internal("atlas/Sayo.pack"));
-
 
         this.game=game;
         camera=new OrthographicCamera();
@@ -80,29 +79,26 @@ public class GameScreen implements Screen {
         b2dr=new Box2DDebugRenderer();
         collisionWithMap= new CollisionWithMap(world,map);
 
-
-
 //        players.add(player=new Sayo(world,this));
-        players.add( new QIqi(world,this));
+//        players.add( new QIqi(world,this));
 //        player.setPosition((viewport.getWorldWidth())/2,(viewport.getWorldHeight())/2);
         bpool=new BulletPool(world,this);
+        players.add(playerOne = new QIqi(world, this)); // Your player one initialization
+        players.add(playerTwo = new Sayo(world, this)); // Your player two initialization
 
         world.setContactListener(new WorldContactListener(this));
-        hud = new TopHud(game.batch);
-
-
+        hud = new TopHud(game.batch, playerOne, playerTwo);
     }
+
     public TextureAtlas getAtlas(){
         return atlas;
     }
-    public void handlInput(float delta){
 
+    public void handlInput(float delta){
         for(Player p:players){
             p.handleInput(delta,bullets);
         }
         handleBullets(delta);
-
-
     }
     public  void update(float delta){
         handlInput(delta);
@@ -117,7 +113,6 @@ public class GameScreen implements Screen {
 
         }
 //        camera.position.x=player.b2body.getPosition().x;
-
 //        camera.position.y=player.b2body.getPosition().y;
         camera.update();
         renderer.setView(camera);
@@ -128,8 +123,7 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void show() {
-    }
+    public void show() {}
 
     @Override
     public void render(float delta) {
@@ -145,8 +139,6 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
 
-
-
         for (Player p:players){
             p.draw(game.batch);
         }
@@ -161,25 +153,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
         viewport.update(width,height);
-
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
@@ -187,10 +171,9 @@ public class GameScreen implements Screen {
         renderer.dispose();
         world.dispose();
         b2dr.dispose();
-
     }
-    void  handleBullets(float delta){
 
+    void  handleBullets(float delta){
         bullets.removeAll(toremove);
         for (Bullet bllets : bullets) {
             bllets.update(delta);
@@ -200,8 +183,6 @@ public class GameScreen implements Screen {
             bpool.free(b);
         }
         toremove.clear();
-
-
     }
 
 }
