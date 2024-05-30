@@ -147,12 +147,26 @@ public class Sayo extends Player{
             b.idle.flip(true,false);
         }
     }
-    public void setToInitial()
-    {
-        bdef.position.set(2.6359673f,5.271643f);
-        setHealth(2000f);
 
+    public void setToInitial() {
+        // Ensure the body is not null
+        if (b2body != null) {
+            // Check if the world is not locked
+            if (!b2body.getWorld().isLocked()) {
+                // Set the transform with position and angle (angle is 0 here)
+                b2body.setTransform(2.6359673f,5.271643f,0);
+                // Apply a linear impulse to the body
+                b2body.applyLinearImpulse(new Vector2(0, 1), b2body.getWorldCenter(), true);
 
+                // Set the health of the player
+                setHealth(2000f);
+            } else {
+                System.err.println("Cannot set transform: world is locked.");
+            }
+        } else {
+            System.err.println("Cannot set transform: b2body is null.");
+        }
     }
+
 
 }

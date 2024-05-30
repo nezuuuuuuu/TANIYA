@@ -25,7 +25,7 @@ public class MainMenuScreen implements Screen {
     private Animation<TextureRegion> backgroundAnimation;
     private SpriteBatch batch;
     private float stateTime;
-    private MusicManager musicManager = null;
+
 
 
     Skin btnSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
@@ -40,9 +40,8 @@ public class MainMenuScreen implements Screen {
 
     Table table = new Table();
 
-    public MainMenuScreen(OOPFinal game, MusicManager musicManager) {
+    public  MainMenuScreen(OOPFinal game) {
         this.game = game;
-        this.musicManager = musicManager;
         stage = new Stage(new ScreenViewport());
         batch = new SpriteBatch();
         backgroundTexture = new Texture(Gdx.files.internal("mainmenu/mainmenubg.png"));
@@ -59,7 +58,7 @@ public class MainMenuScreen implements Screen {
         playLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                 game.setScreen(new StartGameScreen(game));
+                game.setScreen(new StartGameScreen(game));
             }
 
             @Override
@@ -178,9 +177,9 @@ public class MainMenuScreen implements Screen {
 
     }
 
+
     @Override
     public void show() {
-        musicManager.play();
     }
 
     @Override
