@@ -21,7 +21,7 @@ public class MySQLConnector {
         return c;
     }
 
-    public static void main(String[] args) {
-        MySQLConnector.getConnection();
-    }
+//    public static void main(String[] args) {
+//        MySQLConnector.getConnection();
+//    }
 }

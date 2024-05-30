@@ -59,7 +59,7 @@ public class MainMenuScreen implements Screen {
         playLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                 game.setScreen(new GameScreen(game));
+                 game.setScreen(new StartGameScreen(game));
             }
 
             @Override
@@ -102,10 +102,10 @@ public class MainMenuScreen implements Screen {
         });
 
         historyLabel.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                game.setScreen(new OptionScreen(game));
-//            }
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new HistoryScreen(game));
+            }
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
