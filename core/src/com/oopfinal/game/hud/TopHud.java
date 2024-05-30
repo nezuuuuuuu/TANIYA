@@ -14,11 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.oopfinal.game.OOPFinal;
+import com.oopfinal.game.screens.GameOverScreen;
 import com.oopfinal.game.screens.GameScreen;
 import com.oopfinal.game.sprite.characters.Player;
 
@@ -48,9 +47,12 @@ public class TopHud implements Disposable {
     private TextureRegion heartIcon;
     Label.LabelStyle labelStyle;
 
-    public TopHud(SpriteBatch sb) {
+    private OOPFinal game; // Add a reference to your game
+
+    public TopHud(SpriteBatch sb, OOPFinal game) { // Accept MainGame as a parameter
         this.playerOne = GameScreen.player1;
         this.playerTwo = GameScreen.player2;
+        this.game = game; // Initialize the game reference
 
         worldTimer = 120;
         timeCount = 0;
@@ -103,17 +105,11 @@ public class TopHud implements Disposable {
         stage.addActor(table);
         stage.addActor(playerOneTable);
         stage.addActor(playerTwoTable);
-
-
-
-
-
-
     }
 
     public void update(float dt) {
         timeCount += dt;
-        if (timeCount >= 4) {
+        if (timeCount >= 1) { // Adjusted from 4 to 1 to make timer decrement every second
             worldTimer--;
             worldtimerLabel.setText(String.format("%03d", worldTimer));
             timeCount = 0;
@@ -122,6 +118,10 @@ public class TopHud implements Disposable {
         playerTwoHealthLabel.setText(playerTwo.getHealth().toString());
         playerTwoScoreLabel.setText(playerTwo.getScore());
         playerOneScoreLabel.setText(playerOne.getScore());
+
+        if (worldTimer <= 0) {
+            game.setScreen(new GameOverScreen(game)); // Switch to GameOverScreen when timer reaches 0
+        }
     }
 
     public static void addScore(int value) {

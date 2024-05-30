@@ -3,7 +3,7 @@ package com.oopfinal.game.crud;
 import java.sql.*;
 
 public class MySQLConnector {
-//    access xampp using my account
+//    access xampp using my account - di diay ko
 //    private static final String URL = "jdbc:mysql:localhost:3306/dbtaniya";
 //    private static final String USERNAME = "root";
 //    private static final String PASSWORD = "";
@@ -24,7 +24,7 @@ public class MySQLConnector {
 //    public static void main(String[] args) {
 //        MySQLConnector.getConnection();
 //    }
-    private static final String URL = "jdbc:mysql://localhost:3306/carreonjavadb";
+    private static final String URL = "jdbc:mysql://localhost:3306/taniya";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
 

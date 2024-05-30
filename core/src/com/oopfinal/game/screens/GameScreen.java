@@ -111,25 +111,22 @@ public class GameScreen implements Screen {
         bpool=new BulletPool(world,this);
 
         world.setContactListener(new WorldContactListener(this));
-        hud = new TopHud(game.batch);
+        hud = new TopHud(game.batch, game);
         background=new Texture("maps/images/background.png");
-
-
     }
 
 
     public TextureAtlas getAtlas(){
         return atlas;
     }
-    public void handlInput(float delta){
 
+    public void handlInput(float delta){
         for(Player p:players){
             p.handleInput(delta,bullets);
         }
         handleBullets(delta);
-
-
     }
+
     public  void update(float delta){
         for(Player player:players){
             if(player.getHealth()<=0){
