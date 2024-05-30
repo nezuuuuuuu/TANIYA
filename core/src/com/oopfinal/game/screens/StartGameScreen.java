@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -46,7 +45,16 @@ public class StartGameScreen implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen((Screen) new GameScreen((OOPFinal) game));
+                game.setScreen(new GameScreen(game)); // Removed typecasting
+                dispose();
+            }
+        });
+
+        TextButton backButton = new TextButton("BACK", skin);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MainMenuScreen(game)); // Corrected typecasting
                 dispose();
             }
         });
@@ -56,6 +64,7 @@ public class StartGameScreen implements Screen {
         table.add(player2Label).pad(10);
         table.add(player2Input).pad(10).row();
         table.add(startButton).colspan(2).pad(10);
+        table.add(backButton).colspan(2).pad(10);
     }
 
     @Override

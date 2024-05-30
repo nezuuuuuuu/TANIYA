@@ -185,11 +185,25 @@ public class QIqi extends Player{
 
     }
 
-    public void setToInitial()
-    {
-        bdef.position.set(17.3218f , 6.021669f);
-        setHealth(2000f);
+    public void setToInitial() {
+        // Ensure the body is not null
+        if (b2body != null) {
+            // Check if the world is not locked
+            if (!b2body.getWorld().isLocked()) {
+                // Set the transform with position and angle (angle is 0 here)
+                b2body.setTransform(17.3218f, 6.021669f, 0);
 
+                // Apply a linear impulse to the body
+                b2body.applyLinearImpulse(new Vector2(0, 1), b2body.getWorldCenter(), true);
+
+                // Set the health of the player
+                setHealth(2000f);
+            } else {
+                System.err.println("Cannot set transform: world is locked.");
+            }
+        } else {
+            System.err.println("Cannot set transform: b2body is null.");
+        }
     }
 
 
