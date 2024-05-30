@@ -7,6 +7,9 @@ buildscript {
         gradlePluginPortal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         google()
+        flatDir{
+            dirs 'lib'
+        }
     }
     dependencies {
         
@@ -36,6 +39,9 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://jitpack.io" }
+        flatDir{
+            dirs '../lib'
+        }
     }
 }
 
@@ -51,6 +57,7 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
         api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+        implementation name: 'mysql-connector-j-8.3.0'
         
     }
 }
@@ -68,6 +75,7 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        implementation name: 'mysql-connector-j-8.3.0'
         
     }
 }
