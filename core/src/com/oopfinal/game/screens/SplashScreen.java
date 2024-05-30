@@ -65,7 +65,7 @@ public class SplashScreen implements Screen {
 
 
         if (timeSinceShown > 4) {
-            game.setScreen((Screen) new GameScreen((OOPFinal) game)); // Change to your main menu or game screen
+            game.setScreen((Screen) new MainMenuScreen((OOPFinal) game)); // Change to your main menu or game screen
         }
     }
 

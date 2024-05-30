@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.oopfinal.game.managers.MusicManager;
 import com.oopfinal.game.screens.LoadingScreen;
 import com.oopfinal.game.screens.MainMenuScreen;
+import com.oopfinal.game.screens.SplashScreen;
 
 public class OOPFinal extends Game {
 	public SpriteBatch batch;

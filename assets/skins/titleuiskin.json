@@ -1,7 +1,7 @@
 {
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "default-font": {
-      "file": "default-font.fnt"
+      "file": "Copperlate-Light.fnt"
     }
   },
   "com.badlogic.gdx.graphics.Color": {
@@ -80,7 +80,7 @@
   "com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle": {
     "default": {
       "font": "default-font",
-      "fontColor": "white",
+      "fontColor": "black",
       "background": "default-select",
       "scrollStyle": "default",
       "listStyle": {

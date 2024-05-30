@@ -54,7 +54,7 @@ public class TopHud implements Disposable {
         this.playerTwo = GameScreen.player2;
         this.game = game; // Initialize the game reference
 
-        worldTimer = 120;
+        worldTimer = 5;
         timeCount = 0;
 
         viewport = new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());

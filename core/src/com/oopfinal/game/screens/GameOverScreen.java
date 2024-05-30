@@ -1,5 +1,6 @@
 package com.oopfinal.game.screens;
-
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -7,8 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.oopfinal.game.OOPFinal;
 
@@ -18,6 +17,9 @@ public class GameOverScreen implements Screen {
     private SpriteBatch batch;
     private OOPFinal game;
     private OrthographicCamera camera;
+    private Skin skin, skin2;
+    private Texture backgroundTexture;
+    private Image backgroundImage;
 
     public GameOverScreen(OOPFinal game) {
         this.game = game;
@@ -26,18 +28,27 @@ public class GameOverScreen implements Screen {
         this.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.stage = new Stage(new ScreenViewport(), batch);
 
-        BitmapFont font = new BitmapFont();
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, com.badlogic.gdx.graphics.Color.WHITE);
+        // Load the skin from the uiskin.json file
+        skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+
+        backgroundTexture = new Texture(Gdx.files.internal("img/red-gradient-bg.jpg"));
+        backgroundImage = new Image(backgroundTexture);
+        backgroundImage.setFillParent(true);
+
+        stage.addActor(backgroundImage);
+
+        Label.LabelStyle labelStyle = skin.get(Label.LabelStyle.class);
+        labelStyle.font.getData().setScale(1.5f);
 
         Table table = new Table();
         table.setFillParent(true);
 
-        Label gameOverLabel = new Label("Game Over", labelStyle);
-        Label playAgainLabel = new Label("Tap to Play Again", labelStyle);
+        Label gameOverLabel = new Label("GAME OVER", skin, "title");
+        TextButton playAgainButton = new TextButton("Tap to Play Again", skin);
 
         table.add(gameOverLabel).expandX().padBottom(20);
         table.row();
-        table.add(playAgainLabel).expandX();
+        table.add(playAgainButton).expandX();
 
         stage.addActor(table);
     }
@@ -80,6 +91,7 @@ public class GameOverScreen implements Screen {
     public void dispose() {
         stage.dispose();
         batch.dispose();
+        skin.dispose(); // Dispose the skin when done
     }
 }
 
