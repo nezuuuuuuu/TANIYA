@@ -97,7 +97,7 @@ public class Sayo extends Player{
             this.b2body.applyLinearImpulse(new Vector2(0, -0.2f), this.b2body.getWorldCenter(), true);
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ENTER)) {
             if (!this.isFlipX()) {
                 createBullet(x + 0.4f, y, 10f, 0, bullets);
             } else {
@@ -105,7 +105,7 @@ public class Sayo extends Player{
             }
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.X)&&cooldown==0) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT)&&cooldown==0) {
             createSBullet(x, y - 0.4f, 0, -9f, bullets);
             createSBullet(x, y + 0.4f, 0, 9f, bullets);
             createSBullet(x + 0.4f, y, 9f, 0, bullets);

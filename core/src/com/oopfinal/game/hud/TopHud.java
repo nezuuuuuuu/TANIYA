@@ -68,14 +68,15 @@ public class TopHud implements Disposable {
         heartTexture = new Texture(Gdx.files.internal("UI/health.png")); //tofix
         heartIcon = new TextureRegion(heartTexture);
 
-        white = new BitmapFont(Gdx.files.internal("font/white16.fnt"), false);
-        labelStyle = new Label.LabelStyle(white, Color.RED);
-        Pixmap labelColor = new Pixmap(10, 10, Pixmap.Format.RGB888);
-        labelColor.setColor(Color.RED);
-        labelColor.fill();
+        white = new BitmapFont(Gdx.files.internal("skins/Copperlate-Light.fnt"), false);
+        labelStyle = new Label.LabelStyle(white, Color.BLACK);
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle(white, Color.YELLOW.cpy());
+//        Pixmap labelColor = new Pixmap(10, 10, Pixmap.Format.RGB888);
+//        labelColor.setColor(Color.RED);
+//        labelColor.fill();
 
         Table playerOneTable = new Table();
-        playerOneHealthLabel = new Label(String.format("%03f", playerOne.getHealth()), labelStyle);
+        playerOneHealthLabel = new Label(String.format("%03f", playerOne.getHealth()), labelStyle2);
         playerOneTable.bottom().left();
         playerOneTable.setFillParent(true);
         playerOneTable.add(new Image(heartIcon)).padLeft(10).padBottom(10).width(Value.percentWidth(0.05f)).height(Value.percentHeight(0.05f));
@@ -83,7 +84,7 @@ public class TopHud implements Disposable {
 
         // Create table for player two health display
         Table playerTwoTable = new Table();
-        playerTwoHealthLabel = new Label(String.format("%03f", playerTwo.getHealth()), labelStyle);
+        playerTwoHealthLabel = new Label(String.format("%03f", playerTwo.getHealth()), labelStyle2);
         playerTwoTable.bottom().right();
         playerTwoTable.setFillParent(true);
         playerTwoTable.add(playerTwoHealthLabel).padRight(viewport.getScreenWidth()/8).padBottom(10);
@@ -99,9 +100,9 @@ public class TopHud implements Disposable {
 
         worldtimerLabel = new Label(String.valueOf(worldTimer), labelStyle);
 
-        table.add(playerOneScoreLabel).expandX().padTop(10);
-        table.add(worldtimerLabel).expandX().padTop(10);
-        table.add(playerTwoScoreLabel).expandX().padTop(10);
+        table.add(playerOneScoreLabel).expandX();
+        table.add(worldtimerLabel).expandX();
+        table.add(playerTwoScoreLabel).expandX();
 
         table.row(); // THIS CREATES A NEW ROW
         table.add(scoreLabel).expandX();
@@ -114,7 +115,7 @@ public class TopHud implements Disposable {
 
     public void update(float dt) {
         timeCount += dt;
-        if (timeCount >= 1) { // Adjusted from 4 to 1 to make timer decrement every second
+        if (timeCount >= 4) { // Adjusted from 4 to 1 to make timer decrement every second
             worldTimer--;
             worldtimerLabel.setText(String.format("%03d", worldTimer));
             timeCount = 0;

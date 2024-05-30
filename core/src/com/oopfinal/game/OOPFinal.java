@@ -1,6 +1,7 @@
 package com.oopfinal.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.oopfinal.game.managers.MusicManager;
@@ -19,11 +20,10 @@ public class OOPFinal extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-//		musicManager = new MusicManager();
-//		mainMenuScreen = new MainMenuScreen(this, musicManager);
-		this.setScreen(new MainMenuScreen(this));
 
-		//full screen
+		this.setScreen(new SplashScreen(this));
+
+
 //		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 	}
 
