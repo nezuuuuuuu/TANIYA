@@ -17,9 +17,14 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oopfinal.game.OOPFinal;
+import com.oopfinal.game.crud.MySQLConnector;
 import com.oopfinal.game.screens.GameOverScreen;
 import com.oopfinal.game.screens.GameScreen;
 import com.oopfinal.game.sprite.characters.Player;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class TopHud implements Disposable {
     public Stage stage;
@@ -54,7 +59,7 @@ public class TopHud implements Disposable {
         this.playerTwo = GameScreen.player2;
         this.game = game; // Initialize the game reference
 
-        worldTimer = 5;
+        worldTimer = 120;
         timeCount = 0;
 
         viewport = new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
@@ -114,12 +119,22 @@ public class TopHud implements Disposable {
             worldtimerLabel.setText(String.format("%03d", worldTimer));
             timeCount = 0;
         }
-        playerOneHealthLabel.setText(playerOne.getHealth().toString());
-        playerTwoHealthLabel.setText(playerTwo.getHealth().toString());
-        playerTwoScoreLabel.setText(playerTwo.getScore());
-        playerOneScoreLabel.setText(playerOne.getScore());
+        playerOneHealthLabel.setText(playerTwo.getHealth().toString());
+        playerTwoHealthLabel.setText(playerOne.getHealth().toString());
+        playerTwoScoreLabel.setText(playerOne.getScore());
+        playerOneScoreLabel.setText(playerTwo.getScore());
 
         if (worldTimer <= 0) {
+            String query = "UPDATE game SET player1score ="+playerTwo.score+", player2score ="+playerOne.score+" WHERE gameid ="+GameScreen.GAME_ID;
+            try(Connection c = MySQLConnector.getConnection();
+                PreparedStatement pst = c.prepareStatement(query)){
+                pst.executeUpdate();
+
+
+            }catch (SQLException e){
+                throw new RuntimeException(e);
+            }
+
             game.setScreen(new GameOverScreen(game)); // Switch to GameOverScreen when timer reaches 0
         }
     }

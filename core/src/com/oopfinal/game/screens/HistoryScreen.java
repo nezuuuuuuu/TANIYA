@@ -2,15 +2,23 @@ package com.oopfinal.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.oopfinal.game.OOPFinal;
+import com.oopfinal.game.crud.MySQLConnector;
+import com.oopfinal.game.crud.SQLMethods;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class HistoryScreen implements Screen {
     private final OOPFinal game;
@@ -18,10 +26,7 @@ public class HistoryScreen implements Screen {
     private Stage stage;
     private Skin skin;
     private Table table;
-    private Table backButtonTable; // Table for the back button
     private String[] history;
-    private Texture backgroundTexture;
-    private Image backgroundImage;
 
     public HistoryScreen(final OOPFinal game) {
         this.game = game;
@@ -31,61 +36,87 @@ public class HistoryScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("skins/uiskin.json")); // Assuming you have a skin file
+        refreshHistory();
 
-        backgroundTexture = new Texture(Gdx.files.internal("img/history-bg.png"));
-        backgroundImage = new Image(backgroundTexture);
-        backgroundImage.setFillParent(true);
-        stage.addActor(backgroundImage);
 
+        //nico vs coni
+    }
+    void refreshHistory(){
         table = new Table();
         table.setFillParent(true);
+//        ScrollPane scrollPane
         stage.addActor(table);
+        String query = "SELECT * FROM game ";
 
-        backButtonTable = new Table();
-        backButtonTable.setFillParent(true);
-        backButtonTable.center().bottom();
-        stage.addActor(backButtonTable);
+        try(Connection c = MySQLConnector.getConnection();
+            PreparedStatement pst = c.prepareStatement(query)){
+//                pst.setInt(1, gameID);
+            try(ResultSet rs = pst.executeQuery()){
+                while(rs.next()){
+                    int gameID = rs.getInt("gameID");
+                    String p1Name = rs.getString("player1name");
+                    int p1Score=rs.getInt("player1score");
+                    String p2Name = rs.getString("player2name");
+                    int p2Score=rs.getInt("player2score");
 
-        history = new String[]{
-                "Player 1: Alice vs Player 2: Bob",
-                "Player 1: Carol vs Player 2: Dave",
-                "Player 1: Eve vs Player 2: Frank"
-        };
+                    System.out.println("Game found!\nGame ID: " + gameID);
+                    System.out.println("Player 1: " + p1Name);
+                    System.out.println("Player 2: " + p2Name);
+                    addHistoryEntry(p1Score+" "+p1Name+" Vs "+ p2Name+" "+p2Score,gameID);
 
-        for (String entry : history) {
-            addHistoryEntry(entry);
+
+                }
+            }catch (SQLException e){
+                throw new RuntimeException(e);
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
         }
 
-        // Add back button
-        TextButton backButton = new TextButton("Back", skin);
-        backButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainMenuScreen(game));
-                dispose();
-            }
-        });
-        backButtonTable.add(backButton).padBottom(100);
     }
 
-    private void addHistoryEntry(String entry) {
-        Label.LabelStyle labelStyle = skin.get(Label.LabelStyle.class);
-        labelStyle.font.getData().setScale(0.8f);
-
-        Label historyLabel = new Label(entry, labelStyle);
-        TextButton editButton = new TextButton("Edit", skin);
+    private void addHistoryEntry(String entry,int id) {
+        Label historyLabel = new Label(entry, skin);
         TextButton deleteButton = new TextButton("Delete", skin);
+        deleteButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try(Connection c = MySQLConnector.getConnection();
+                    PreparedStatement pst = c.prepareStatement("DELETE FROM game where gameID= "+id+"")){
+                    pst.executeUpdate();
+                    stage.clear();
 
+                }catch (SQLException e){
+                    throw new RuntimeException(e);
+                }
+                refreshHistory();
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+
+            }
+
+            @Override
+            public boolean mouseMoved(InputEvent event, float x, float y) {
+                return true;
+            }
+        });
+        // Set button sizes to be proportional to screen size
         float buttonWidth = Gdx.graphics.getWidth() / 5f;
         float buttonHeight = Gdx.graphics.getHeight() / 20f;
-        editButton.setSize(buttonWidth, buttonHeight);
         deleteButton.setSize(buttonWidth, buttonHeight);
 
+        // Set label width to adapt to screen width
         historyLabel.setWrap(true);
         historyLabel.setWidth(Gdx.graphics.getWidth() / 2f);
 
         table.add(historyLabel).width(Gdx.graphics.getWidth() * 0.6f).pad(5);
-        table.add(editButton).pad(5);
         table.add(deleteButton).pad(5).row();
     }
 

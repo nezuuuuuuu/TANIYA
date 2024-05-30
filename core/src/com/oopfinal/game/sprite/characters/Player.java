@@ -61,7 +61,7 @@ public abstract class Player extends Sprite {
         this.health = health;
     }
 
-    private Float health=2000f;
+    private Float health=500f;
 
 
 

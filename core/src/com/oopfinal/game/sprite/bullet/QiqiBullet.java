@@ -1,6 +1,7 @@
 package com.oopfinal.game.sprite.bullet;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -51,12 +52,8 @@ public class QiqiBullet extends Bullet {
             b2body.setGravityScale(0);
         }
         void bulletAnimation(){
-
-            idle =new TextureRegion(getTexture(),32*15,0,32*10,25);
-            setBounds(0,0,32*16/OOPFinal.PPM,32*2/OOPFinal.PPM);
-
-
-
+            idle =new TextureRegion(new Texture("atlas//teleport.png"),32*2,32*2,32*14,32*14);
+            setBounds(0,0,32*3/OOPFinal.PPM,32*3/OOPFinal.PPM);
         }
         public void update(float dt){
             stateTimer += dt;

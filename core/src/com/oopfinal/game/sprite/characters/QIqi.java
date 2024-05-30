@@ -97,7 +97,7 @@ public class QIqi extends Player{
                     bullets.remove(teleportBullet);
 
                     teleportBullet = null;
-                    b2body.setTransform(tx+3, ty, 0);
+                    b2body.setTransform(tx, ty+0.03f, 0);
                     b2body.applyLinearImpulse(new Vector2(0, 1),b2body.getWorldCenter(),true);
                     System.out.println("Payer: "+b2body.getPosition().x+" "+b2body.getPosition().y);
 
@@ -197,7 +197,7 @@ public class QIqi extends Player{
                 b2body.applyLinearImpulse(new Vector2(0, 1), b2body.getWorldCenter(), true);
 
                 // Set the health of the player
-                setHealth(2000f);
+                setHealth(500f);
             } else {
                 System.err.println("Cannot set transform: world is locked.");
             }

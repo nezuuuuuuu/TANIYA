@@ -16,6 +16,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.oopfinal.game.OOPFinal;
+import com.oopfinal.game.crud.MySQLConnector;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class StartGameScreen implements Screen {
     private final OOPFinal game;
@@ -51,9 +57,39 @@ public class StartGameScreen implements Screen {
         player2Input = new TextField("", skin);
 
         TextButton startButton = new TextButton("Start Game", skin);
+//        startButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                game.setScreen(new GameScreen(game)); // Removed typecasting
+//                dispose();
+//            }
+//        });
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                String query = "INSERT INTO game (player1name, player2name, player1score, player2score) VALUES (?, ?, ?, ?)";
+                try (Connection conn = MySQLConnector.getConnection();
+                     PreparedStatement pstmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+                    pstmt.setString(1, player1Input.getText());
+                    pstmt.setString(2, player2Input.getText());
+                    pstmt.setInt(3, 0); // Assuming player1score is an integer
+                    pstmt.setInt(4, 0);
+                    pstmt.executeUpdate();
+
+
+                    try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            GameScreen.GAME_ID = generatedKeys.getInt(1);
+                            System.out.println("Game id=   "+GameScreen.GAME_ID);
+                        } else {
+                            throw new SQLException("Creating game failed, no ID obtained.");
+                        }
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 game.setScreen(new GameScreen(game)); // Removed typecasting
                 dispose();
             }

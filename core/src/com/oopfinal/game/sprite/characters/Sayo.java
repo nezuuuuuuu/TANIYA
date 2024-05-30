@@ -159,7 +159,7 @@ public class Sayo extends Player{
                 b2body.applyLinearImpulse(new Vector2(0, 1), b2body.getWorldCenter(), true);
 
                 // Set the health of the player
-                setHealth(2000f);
+                setHealth(500f);
             } else {
                 System.err.println("Cannot set transform: world is locked.");
             }

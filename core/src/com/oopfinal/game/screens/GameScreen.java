@@ -40,7 +40,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameScreen implements Screen {
 //    MusicPlayer fightMusic;
-
+        public static int GAME_ID;
     boolean   isPaused=false;
 
     Stage stage;
@@ -190,7 +190,7 @@ public class GameScreen implements Screen {
         renderer.render(new int[]{0,1,2,3,4,5,6});
 
 
-        b2dr.render(world,camera.combined);
+//        b2dr.render(world,camera.combined);
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
