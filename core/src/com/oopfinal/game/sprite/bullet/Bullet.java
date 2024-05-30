@@ -16,19 +16,20 @@ public class Bullet extends Sprite implements Disposable  {
 
 
     public enum State {FALLING, IDLING, JUMPING, RUNNING}
-        public World world;
-        public Body b2body;
-        public TextureRegion idle;
+    public World world;
+    public Body b2body;
+    public TextureRegion idle;
 
-        private Animation<TextureRegion> running;
-        private Animation<TextureRegion> idling;
-        private Animation<TextureRegion> jumping;
-        public   float stateTimer;
-        private boolean runningRight;
-        public float x,y;
-        Player player;
-        TextureRegion region;
-        public float damage=15;
+    private Animation<TextureRegion> running;
+    private Animation<TextureRegion> idling;
+    private Animation<TextureRegion> jumping;
+    public   float stateTimer;
+    private boolean runningRight;
+    public float x,y;
+    Player player;
+    TextureRegion region;
+    public float damage=15;
+    private int darwin;
 
     public float getDamage() {
         return damage;
@@ -36,12 +37,12 @@ public class Bullet extends Sprite implements Disposable  {
 
     public  Bullet(World world, GameScreen screen, float x, float y, Player player, TextureAtlas.AtlasRegion textureatlas){
 
-            super(textureatlas);
-            this.y=y;
-            this.x=x;
-            this.player=player;
+        super(textureatlas);
+        this.y=y;
+        this.x=x;
+        this.player=player;
 
-            this.world=world;
+        this.world=world;
         defineBullet();
 
         bulletAnimation();
@@ -58,13 +59,13 @@ public class Bullet extends Sprite implements Disposable  {
 
     }
 
-        public void update(float dt){
-            stateTimer += dt;
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+    public void update(float dt){
+        stateTimer += dt;
+        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
 
-            setRegion(idle);
+        setRegion(idle);
 
-        }
+    }
 
     @Override
     public void dispose() {
@@ -79,20 +80,20 @@ public class Bullet extends Sprite implements Disposable  {
 
 
     public  void  defineBullet(){
-            BodyDef bdef =new BodyDef();
-            bdef.position.set(x,y);
-            bdef.type=BodyDef.BodyType.DynamicBody;
-            b2body= world.createBody(bdef);
+        BodyDef bdef =new BodyDef();
+        bdef.position.set(x,y);
+        bdef.type=BodyDef.BodyType.DynamicBody;
+        b2body= world.createBody(bdef);
 
-            FixtureDef fdef =new FixtureDef();
-            CircleShape shape=new CircleShape();
-            shape.setRadius(15/OOPFinal.PPM);
+        FixtureDef fdef =new FixtureDef();
+        CircleShape shape=new CircleShape();
+        shape.setRadius(15/OOPFinal.PPM);
 
-            fdef.shape=shape;
-            fdef.friction=0;
-            b2body.createFixture(fdef).setUserData("bullet");
-            b2body.setGravityScale(0);
+        fdef.shape=shape;
+        fdef.friction=0;
+        b2body.createFixture(fdef).setUserData("bullet");
+        b2body.setGravityScale(0);
 
-        }
     }
+}
 

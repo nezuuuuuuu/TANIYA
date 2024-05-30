@@ -1,6 +1,7 @@
 package com.oopfinal.game.sprite.bullet;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,27 +17,35 @@ public class SayoBullet extends Bullet{
 
     }
 
+    public void update(float dt){
+        stateTimer += dt;
+        if(b2body.getLinearVelocity().x>0) {
+            setPosition(b2body.getPosition().x - getWidth() + .5f, b2body.getPosition().y - getHeight() / 3);
+        }else {
+            setPosition(b2body.getPosition().x - getWidth() /6, b2body.getPosition().y - getHeight() / 3);
 
-
-    void BulletAnimation(Animation<TextureRegion> running) {
-
-
-        Array<TextureRegion> frames=new Array<>();
-
-        for(int i=1; i<3;i++){
-            for(int j=0;j<4;j++)
-                frames.add(new TextureRegion(getTexture(),j*5+1,6*32*i,32*5,32*5));
         }
+        setRegion(idle);
 
-        running=new Animation<TextureRegion>(0.07f,frames);
-        frames.clear();
-        return;
     }
+
 
     @Override
     void bulletAnimation() {
-        idle =new TextureRegion(getTexture(),32*15,0,32*10,25);
+        idle =new TextureRegion(getTexture(),32*15,50,32*10,25);
         setBounds(0,0,32*16/ OOPFinal.PPM,32*2/OOPFinal.PPM);
 
+    }
+    public static class PoweredUp extends Bullet {
+
+
+        public PoweredUp(World world, GameScreen screen, float x, float y, Player player) {
+            super(world, screen, x, y, player, new TextureAtlas(Gdx.files.internal("atlas/skills.pack")).findRegion("allthree"));
+        }
+        void bulletAnimation() {
+            idle =new TextureRegion(new Texture("atlas//sayoball.png"),32*3,32*2,32*4,32*4);
+            setBounds(0,0,32*1/ OOPFinal.PPM,32*1/OOPFinal.PPM);
+
+        }
     }
 }

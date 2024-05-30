@@ -44,14 +44,17 @@ public class WorldContactListener implements ContactListener {
         Bullet bullet = null;
         Player player = null;
 
-        //        if("bullet".equals(fixtureA.getUserData()) && "bullet".equals(fixtureB.getUserData())) {
-        //            for (Bullet b : gameScreen.bullets) {
-        //                if (b.b2body == fixtureA.getBody() || b.b2body == fixtureB.getBody()) {
-        //                    gameScreen.toremove.add(b);
-        //                }
-        //            }
-        //            return;
-        //        }
+        if("bullet".equals(fixtureA.getUserData()) && "bullet".equals(fixtureB.getUserData())) {
+            for (Bullet b : gameScreen.bullets) {
+                if (b.b2body == fixtureA.getBody() || b.b2body == fixtureB.getBody()) {
+                    if(gameScreen.toremove.contains(b)){
+                        continue;
+                    }
+                    gameScreen.toremove.add(b);
+                }
+            }
+            return;
+        }
 
         if ("bullet".equals(fixtureA.getUserData()) || "bullet".equals(fixtureB.getUserData())) {
 
@@ -72,21 +75,25 @@ public class WorldContactListener implements ContactListener {
                     break;
                 }
             }
-            //
-            //            if ("player".equals(fixtureA.getUserData()) || "player".equals(fixtureB.getUserData())) {
-            //
-            //                for (Player p : gameScreen.players) {
-            //                    if (p.b2body == fixtureA.getBody() || p.b2body == fixtureB.getBody()) {
-            //                        if (bullet != null && bullet.getPlayer() != p) {
-            //                            player = p;
-            //                            player.take(bullet, bullet.getPlayer());
-            //                        }
-            //                        break;
-            //                    }
-            //                }
-            //            }
+
+            if ("player".equals(fixtureA.getUserData()) || "player".equals(fixtureB.getUserData())) {
+                System.out.println("player hit");
+
+                for (Player p : gameScreen.players) {
+                    if (p.b2body == fixtureA.getBody() || p.b2body == fixtureB.getBody()) {
+                        System.out.println("player health reduces");
+
+                        player = p;
+                        player.take(bullet, bullet.getPlayer());
+                        break;
+                    }
+                }
+            }
 
             if (bullet != null) {
+                if(gameScreen.toremove.contains(bullet)){
+                    return;
+                }
 
                 System.out.println(gameScreen.world.getBodyCount());
                 if(gameScreen.toremove.indexOf(bullet)<0){
@@ -106,7 +113,7 @@ public class WorldContactListener implements ContactListener {
     public void endContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-            handleWallCollision(fixtureA, fixtureB);
+        handleWallCollision(fixtureA, fixtureB);
 
     }
 

@@ -16,6 +16,10 @@ import com.oopfinal.game.tools.BulletPool;
 import java.util.ArrayList;
 
 public abstract class Player extends Sprite {
+
+
+
+
     public enum State {FALLING, IDLING, JUMPING, RUNNING}
     public World world;
     public Body b2body;
@@ -27,8 +31,9 @@ public abstract class Player extends Sprite {
     public Animation<TextureRegion> jumping;
     public  float stateTimer;
     public boolean runningRight;
-    public int jumped=0;
 
+    public int jumped=0;
+    BodyDef bdef;
 
     public CircleShape shape;
     Rectangle footer;
@@ -38,7 +43,27 @@ public abstract class Player extends Sprite {
     float x;
     float y;
     BulletPool bulletPool;
-    int hp=100;
+    public Integer score=0;
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Float getHealth() {
+        return health;
+    }
+
+    public void setHealth(Float health) {
+        this.health = health;
+    }
+
+    private Float health=2000f;
+
+
 
 
     public  Player(World world, GameScreen screen, TextureAtlas.AtlasRegion atlasRegion){
@@ -51,29 +76,23 @@ public abstract class Player extends Sprite {
         previousState=State.IDLING;
         stateTimer=0;
         runningRight=true;
-        Array<TextureRegion> frames=new Array<>();
 
-        for(int i=0; i<18;i++)
-            frames.add(new TextureRegion(getTexture(),i*32*8,0,32*7,32*9));
-        running=new Animation<TextureRegion>(0.07f,frames);
-        frames.clear();
+
+
 
         definePlayer();
-        idle =new TextureRegion(getTexture(),0,0,32*7,32*9);
-        setBounds(0,0,32*3/OOPFinal.PPM,32*3/OOPFinal.PPM);
-        setRegion(idle);
 
-   }
-
-   public void update(float dt){
+    }
+    public void update(float dt){
         setPosition(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2);
         setRegion(getFrame(dt));
 //       System.out.println(jumped);
-        x = b2body.getPosition().x;
-        y = b2body.getPosition().y;
-   }
+        x=b2body.getPosition().x;
+        y=b2body.getPosition().y;
 
-   public  TextureRegion getFrame(float dt){
+    }
+
+    public  TextureRegion getFrame(float dt){
         currentState=getState();
         TextureRegion region;
         switch (currentState){
@@ -90,11 +109,11 @@ public abstract class Player extends Sprite {
                 break;
         }
         if ((b2body.getLinearVelocity().x>0.5||runningRight)&&region.isFlipX()) {
-           region.flip(true,false);
-           runningRight=true;
+            region.flip(true,false);
+            runningRight=true;
 //            System.out.println(b2body.getLinearVelocity().y);
-       }
-       else if((b2body.getLinearVelocity().x<-.5||!runningRight)&&!region.isFlipX()){
+        }
+        else if((b2body.getLinearVelocity().x<-.5||!runningRight)&&!region.isFlipX()){
             region.flip(true,false);
             runningRight=false;
 //            System.out.println(b2body.getLinearVelocity().y);
@@ -102,56 +121,28 @@ public abstract class Player extends Sprite {
         }
         stateTimer=currentState==previousState? stateTimer+dt:0;
         previousState = currentState;
-       return region;
-   }
-
-   public  State getState(){
-       if(b2body.getLinearVelocity().y>1){
-//           System.out.println("going up");
-           return State.JUMPING;
-       }
-       else if(b2body.getLinearVelocity().y<-1) {
-//           System.out.println("going down");
-           return State.FALLING;
-        }
-       else if(b2body.getLinearVelocity().x!=0) {
-           return State.RUNNING;
-       } else {
-
-           return State.IDLING;
-       }
-
-   }
-
-    public  void  definePlayer(){
-        BodyDef bdef =new BodyDef();
-        bdef.position.set(32*10/ OOPFinal.PPM+2,500/OOPFinal.PPM);
-        bdef.type=BodyDef.BodyType.DynamicBody;
-        b2body= world.createBody(bdef);
-
-        FixtureDef fdef =new FixtureDef();
-        shape=new CircleShape();
-
-        shape.setRadius(35/OOPFinal.PPM);
-
-        fdef.shape=shape;
-        fdef.friction=0;
-        b2body.createFixture(fdef).setUserData("body");
-
-
-        EdgeShape head=new EdgeShape();
-        head.set(new Vector2(-9/OOPFinal.PPM,50/OOPFinal.PPM),new Vector2(9/OOPFinal.PPM,50/OOPFinal.PPM));
-        fdef.shape=head;
-        fdef.isSensor=true;
-        b2body.createFixture(fdef).setUserData("head");
-
-
-        EdgeShape foot=new EdgeShape();
-        foot.set(new Vector2(-9/OOPFinal.PPM,-50/OOPFinal.PPM),new Vector2(9/OOPFinal.PPM,-50/OOPFinal.PPM));
-        fdef.shape=foot;
-        fdef.isSensor=true;
-        b2body.createFixture(fdef).setUserData("foot");
+        return region;
     }
+    public  State getState(){
+
+        if(b2body.getLinearVelocity().y>1){
+//           System.out.println("going up");
+            return State.JUMPING;
+        }
+        else if(b2body.getLinearVelocity().y<-1) {
+//           System.out.println("going down");
+
+            return State.FALLING;
+        }
+        else if(b2body.getLinearVelocity().x!=0) {
+            return State.RUNNING;
+        } else {
+
+            return State.IDLING;
+        }
+
+    }
+    public abstract void  definePlayer();
 
 
     abstract public void handleInput(float dt, ArrayList<Bullet> bullets);
@@ -161,17 +152,21 @@ public abstract class Player extends Sprite {
 
 
     public void take(Bullet bullet,Player player){
-            hp= (int) (hp-bullet.getDamage());
+        setHealth(getHealth()-bullet.getDamage());
+        System.out.println(getHealth());
+        if(this.getHealth()<=0){
+            player.incremntScore();
+                setToInitial();
+
+        }
+
+
+    }
+    public void incremntScore(){
+        this.score++;
     }
 
     abstract void createBullet(float x, float y, float impulseX, float impulsey, ArrayList<Bullet> bullets);
+    public abstract void setToInitial();
 
-
-    public int getHealth() {
-        return hp;
-    }
-
-    public void setHealth(int health) {
-        this.hp = health;
-    }
 }
